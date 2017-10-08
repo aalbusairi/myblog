@@ -9,6 +9,7 @@ import MyLogin from './Login';
 import MyList from './MyList';
 import Create from './Create';
 import ListApi from './ListApi';
+import CreateApi from './CreateApi';
 
 export default observer(class Home extends Component {
 
@@ -32,7 +33,7 @@ export default observer(class Home extends Component {
           <Right />
         </Header>
         <Route path="/a" component={ListApi} />
-        <Route path="/b" component={Create} />
+        <Route path="/b" component={CreateApi} />
         <Route path="/d" render={() => <MyLogin store={this.props.store} />} />
 
         {this.props.store.authenticated ? myFooter : <Content><MyLogin store={this.props.store} /></Content>}
