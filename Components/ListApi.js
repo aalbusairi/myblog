@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text } from 'native-base';
 import { ListView } from 'react-native';
 import { Image } from 'react-native';
+import {observer} from 'mobx-react';
+import store from './Store';
 
+export default observer(class ListApi extends Component {
 
-export default class ListApi extends Component {
   constructor(props) {
   super(props);
   this.state = {
-      url: "https://api.github.com/events",
+      url: "http://139.59.119.40/api/list/?format=json",
       dataSource: new ListView.DataSource({
         rowHasChanged:(row1, row2) => row1 !== row2,
       })
     }
   }
   componentWillMount(){
-    console.log(this.props.store.authenticated)
+
     this.fetchData();
   }
   fetchData(){
@@ -23,20 +25,18 @@ export default class ListApi extends Component {
     .then((response) => response.json())
     .then((response) => {
       console.log(response)
-      this.setState({dataSource: this.state.dataSource.cloneWithRows(response)},function(){console.log(this.state.dataSource)})
+      this.setState({dataSource: this.state.dataSource.cloneWithRows(response.results)},function(){console.log(this.state.dataSource)})
     })
     .catch((error) => console.log(error)).done();
   }
   renderItem(object){
     return (
       <ListItem>
-        <Text>{object.actor.id}</Text>
-        <Image source={{uri: object.actor.avatar_url }} style={{height: 100, width: null, flex: 1}}/>
+        <Text>{object.id}</Text>
       </ListItem>
     )
   }
   render() {
-  if (this.props.store.authenticated == true ) {
     return (
       <Container>
           <List>
@@ -48,10 +48,5 @@ export default class ListApi extends Component {
 
       </Container>
     );
-    } else {
-        return(
-          <Text>Must Login</Text>
-      )
     }
-  }
-}
+})

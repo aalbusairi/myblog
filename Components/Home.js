@@ -8,6 +8,7 @@ import store from './Store';
 import MyLogin from './Login';
 import MyList from './MyList';
 import Create from './Create';
+import ListApi from './ListApi';
 
 export default observer(class Home extends Component {
 
@@ -30,7 +31,7 @@ export default observer(class Home extends Component {
           </Body>
           <Right />
         </Header>
-        <Route path="/a" component={MyList} />
+        <Route path="/a" component={ListApi} />
         <Route path="/b" component={Create} />
         <Route path="/d" render={() => <MyLogin store={this.props.store} />} />
 
