@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text } from 'native-base';
+import { Container, Header, Content, List, ListItem, Text, Button } from 'native-base';
 import { ListView } from 'react-native';
 import { Image } from 'react-native';
 import {observer} from 'mobx-react';
@@ -13,19 +13,27 @@ export default observer(class ListApi extends Component {
       url: "http://139.59.119.40/api/list/?format=json",
       dataSource: new ListView.DataSource({
         rowHasChanged:(row1, row2) => row1 !== row2,
-      })
+      }),
+      // nextUrl: "hehe",
+      // previousUrl: "xD",
     }
   }
   componentWillMount(){
-
     this.fetchData();
   }
   fetchData(){
+    if(this.state.url!=null)
     fetch(this.state.url)
     .then((response) => response.json())
     .then((response) => {
       console.log(response)
-      this.setState({dataSource: this.state.dataSource.cloneWithRows(response.results)},function(){console.log(this.state.dataSource)})
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(response.results),
+        nextUrl: response.next,
+        previousUrl: response.previous,
+      },function(){
+        console.log(this.state.dataSource)
+      })
     })
     .catch((error) => console.log(error)).done();
   }
@@ -36,6 +44,19 @@ export default observer(class ListApi extends Component {
       </ListItem>
     )
   }
+
+  nextPage(e){
+    console.log("setting '"+this.state.url+"' to '"+this.state.nextUrl+"'\n");
+    this.state.url= this.state.nextUrl;
+    this.fetchData();
+  }
+
+  previousPage(e){
+    this.state.url= this.state.previousUrl;
+    this.fetchData();
+  }
+  // change response.next response. previous change this.state.url= new url //
+
   render() {
     return (
       <Container>
@@ -45,7 +66,12 @@ export default observer(class ListApi extends Component {
             renderRow={this.renderItem}
             />
           </List>
-
+          <Button
+          onPress={this.nextPage.bind(this)}
+          full primary><Text>Next</Text></Button>
+          <Button
+          onPress={this.previousPage.bind(this)}
+          full primary><Text>Previous</Text></Button>
       </Container>
     );
     }

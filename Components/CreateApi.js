@@ -19,7 +19,7 @@ export default observer(class CreateApi extends Component {
   createPost(e){
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
+    var mm = today.getMonth()+1;
 
     var yyyy = today.getFullYear();
     if(dd<10){
@@ -58,14 +58,10 @@ export default observer(class CreateApi extends Component {
     self.setState({loading: true}); }, 1200);
   }
 
-  DraftControl() {
-    this.setState({ draft: !this.state.draft })
-  }
-
   render() {
   return (
     <Container style={{alignSelf: 'stretch'}}>
-    <Text> Create a blog post {"\n"} </Text>
+    <Text> Create a post! {"\n"} </Text>
       <Form>
         <Item>
           <Input label='title' placeholder='title' value={this.state.title} onChangeText={text => this.setState({ title: text })} style={{fontFamily: "Gill Sans"}} />
